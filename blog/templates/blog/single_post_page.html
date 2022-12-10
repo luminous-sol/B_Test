@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }} - Blog </title>
+</head>
+<body>
+    <nav>
+        <!-- 상세 페이지 보다가 다시 목록으로 돌아 갈 수 있다.-->
+        <a href="/blog/">Blog</a>
+    </nav>
+    
+    <h1>{{ post.title }}</h1>
+    <h4>{{ post.create_at }}</h4>
+    <p>{{ post.content }}</p>
+    <hr>
+    
+    <h3>
+        댓글을 남겨 주세요.
+    </h3>
+</body>
+</html>

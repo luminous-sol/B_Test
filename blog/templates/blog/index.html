@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+</head>
+<body>
+    <h1>Blog</h1>
+    
+    {% for p in posts %}
+        <hr>  <!--각 콘텐츠마다 줄 그어주기-->
+        <h2><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h2> 
+        <!-- p에서 get_absolute_url을 받아오는데 없으므로 만들어주러 간다.-->
+        <!--제목-->
+        <h4>{{ p.create_at }}</h4> <!--만들어진 시간-->
+        <p>{{ p.content }}</p> <!--콘텐츠 내용-->
+    {% endfor %}
+    
+</body>
+</html>
