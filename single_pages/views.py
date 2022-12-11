@@ -8,7 +8,7 @@ def landing(request):
 
 def about_me(request):
     return render(
-    request
+    request,
     'single_pages/about_me.html'
     )
 # single_pages 에서 받아 올 landing.html, about_me.html 파일을 만들어준다. 

@@ -21,4 +21,7 @@ urlpatterns = [
     path('blog/', include('blog.urls')), 
     #blog에 urls로 가라는 명령 # 있으려면 blog에 urls 파일이 있어야 한다. 
     path('admin/', admin.site.urls),
+    
+    path('', include('single_pages.urls'))
+    # single_pages에 urls로 가라는 명령 있으려면 single_pages에 urls 파일이 있어야 한다. 
 ]

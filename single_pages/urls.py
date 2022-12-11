@@ -1,8 +1,8 @@
 from django.urls import path
-from . imoort views 
+from . import views 
 
 urlpatterns = [
-    path('about_me/', views.about_me) 
+    path('about_me/', views.about_me),
     # about_me라는 path를 urls을 얻어올거다. views 에서
     path('', views.landing)
     # views에서 about_me 와 landing 을 받아 올 것이다. 
