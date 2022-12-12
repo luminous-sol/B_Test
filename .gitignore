@@ -131,3 +131,5 @@ dmypy.json
 #Pycharm
 .idea/
 migrations
+_media/
+# 테스트용 사진은 git에 올릴 필요가 없기 때문에 .gitignore에 적는다. 

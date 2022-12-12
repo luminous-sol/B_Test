@@ -6,7 +6,7 @@
 
 <head>
     <title>Blog</title>
-    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css'}" media="screen">
+    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
     <!-- https://fontawesome.com/ 아이콘 사이트-->
     <script src="https://kit.fontawesome.com/ccb2e64d6a.js" crossorigin="anonymous"></script>
 </head>
@@ -91,8 +91,10 @@
                 
                 <!-- Blog Post -->
                 <div class="card mb-4">
-                    <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-                    <div class="card-body">
+                    {% if p.head_image %}
+                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
+                    {% endif %}
+                    <img class="card-img-top" src="https://picsum.photos/800/200" alt="random_image">
                         <h2 class="card-title">{{ p.title }}</h2><!-- 포스트 제목 가지고 오기 -->
                         <p class="card-text">{{ p.contents }}</p><!-- 포스트 콘텐츠 가지고 오기 -->
                         <a href="{{ p.get_absoulute_url }}" class="btn btn-primary">Read More &rarr;</a>

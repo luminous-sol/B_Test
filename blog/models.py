@@ -8,7 +8,11 @@ class Post(models.Model):
     # 제목 최대 길이
     content = models.TextField()
     # 콘텐츠는 텍스트필드불러온다(글적는 칸)
-    
+    head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d', blank=True)
+    # 실제로는 _media 방 안에 만들어진다. 
+    # blank=True 필수항목이 아니기 때문에 비워도 된다. 
+    # 이미지 저장하지 않아도 된다.
+    file_upload = models.FileField(upload_to='blog/files/%Y/%m/%d', blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     # 날짜 작성하는 이름
     updated_at = models.DateTimeField(auto_now=True)
