@@ -69,17 +69,24 @@
         <hr>
 
         <!-- Date/Time -->
-        <p>Posted on {{ post.created_at }}</p>
+        <p>Posted on {{ post.create_at }}</p>
 
         <hr>
 
         <!-- Preview Image -->
-        <img class="img-fluid rounded" src="{{ post.head_image.url }}" alt="">
-
-        <hr>
+        {% if post.head_image %}
+            <!-- p.head_image가 있으면 아래 구문을 실행, 없으면 alter-->
+            <img class="img-fluid rounded" src="{{ post.head_image.url }}" alt="">
+        {% else %}
+            <img class="img-fluid" src="https://picsum.photos/seed/{{ post.id }}/800/200" alt="random_image">
+        {% endif %}
+          <hr>
 
         <!-- Post Content -->
         <p>{{ post.content }}</p>
+          {% if post.file_upload %}
+          <a href = "{{ post.file_upload.url }}" class ="Wbtn btn-outline-info" role = "button" download>Download</a>
+          {% endif %}
         <hr>
 
         <!-- Comments Form -->
