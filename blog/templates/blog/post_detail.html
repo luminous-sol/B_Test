@@ -59,7 +59,7 @@
 
         <!-- Title -->
         <h1 class="mt-4">{{ post.title }}</h1>
-
+        <h5 class="text-muted">{{ post.hook_text }}</h5>
         <!-- Author -->
         <p class="lead">
           by
@@ -76,7 +76,7 @@
         <!-- Preview Image -->
         {% if post.head_image %}
             <!-- p.head_image가 있으면 아래 구문을 실행, 없으면 alter-->
-            <img class="img-fluid rounded" src="{{ post.head_image.url }}" alt="">
+            <img class="img-fluid" src="{{ post.head_image.url }}" alt="">
         {% else %}
             <img class="img-fluid" src="https://picsum.photos/seed/{{ post.id }}/800/200" alt="random_image">
         {% endif %}
@@ -85,8 +85,9 @@
         <!-- Post Content -->
         <p>{{ post.content }}</p>
           {% if post.file_upload %}
-          <a href = "{{ post.file_upload.url }}" class ="Wbtn btn-outline-info" role = "button" download>Download</a>
+          <a href = "{{ post.file_upload.url }}" class ="btn btn-outline-info" role = "button" download>Download</a>
           {% endif %}
+          
         <hr>
 
         <!-- Comments Form -->
