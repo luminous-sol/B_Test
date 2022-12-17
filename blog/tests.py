@@ -77,3 +77,51 @@ class TestView(TestCase) :
 
         # 3.4 '아직 게시물이 없습니다.'라는 문구가 더 이상 나타나지 않는다. 
         self.assertNotIn('아직 게시물이 없습니다', main_area.text)
+    
+    
+    #--------------------------------------
+    
+    def test_post_detail(self): # 매개변수로 받는 게 없더라도 self 적어야 한다 # pk도 같이 받는다면 self, pk 
+        
+        # 1.1 포스트 하나 생성하기
+        post_001 = Post.objects.create(
+            title = '첫 번째 포스트 입니다.',
+            content = 'Hello World. We are the world',
+        )
+        
+        # 1.2 포스트 url은 (상세 페이지 주소) '/blog/1/' 이렇게 pk가 붙어있다. 
+        # 지금은 포스트 하나니까 1 넣어서 검사
+        self.assertEqual(post_001.get_absolute_url(), '/blog/1/') 
+        # get_absolute_url 는 reverse함수를 통해 모델 개별 데이터 url을 문자열로 반환
+        
+        #--------------------------------------
+    
+        # 2. 첫 번째 포스트의 상세 페이지 검사하기
+        # 2.1 첫 번째 포스트의 url로 접근하면 정상적으로 작동하는가
+        response = self.client.get(post_001.get_absolute_url())
+        # 1.2 에서 검증한 blog/1을 가져온다. 
+        soup = BeautifulSoup(response.content, 'html.parser') # response 안의 content , html 파일을 파싱
+        self.assertEqual(response.status_code, 200)
+        
+        # 2.2 포스트의 목록 페이지와 같은 navbar가 붙어있는가?
+        navbar = soup.nav 
+        self.assertIn('Blog', navbar.text)
+        self.assertIn('About Me', navbar.text)
+        
+        # 2.3 첫 번째 포스트의 제목이 웹 브라우저 탭 타이틀에 들어잇는가?
+        self.assertIn(post_001.title, soup.title.text)
+        
+        # 2.4 첫 번째 포스트의 제목이 포스트 영역에 있는가?
+        main_area = soup.find('div', id ='main-area')
+        post_area = main_area.find('div', id='post-area')
+        self.assertIn(post_001.title, post_area.text)
+        
+        # 2.5 첫 번째 포스트의 작성자가 포스트 영역에 있는가(지금은 아직 구현 X)
+        
+        # 2.6 첫 번째 포스트의 내용이 포스트 영역에 있는가
+        self.assertIn(post_001.content, post_area.text)
+        # html parser 했으니까 text 로 적어주는 것 
+        
+        
+    
+        

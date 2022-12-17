@@ -5,7 +5,7 @@
 <html>
 
 <head>
-    <title>Blog</title>
+    <title>{% block head_title %}Blog{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
     <!-- https://fontawesome.com/ 아이콘 사이트-->
     <script src="https://kit.fontawesome.com/ccb2e64d6a.js" crossorigin="anonymous"></script>
@@ -22,7 +22,9 @@
                 {% endblock %}
             </div>
                 
+               
 
+            <div class="col-md-4 col-lg-3">
                 <!-- Search Widget -->
                 <div class="card my-4">
                     <h5 class="card-header">Search</h5>
@@ -71,10 +73,21 @@
                     </div>
                 </div>
             </div>
-        </div>
-    
 
-    <!-- Footer 떼가기 -->
+            
+    <!-- Pagination -->
+                <ul class="pagination justify-content-center mb-4">
+                    <li class="page-item">
+                        <a class="page-link" href="#">&larr; Older</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Newer &rarr;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>     
+    
+{% include 'blog/footer.html' %}
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
@@ -86,7 +99,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-
 </body>
 
 </html>
