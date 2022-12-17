@@ -83,11 +83,10 @@
 
     <div class="container my-3">
         <div class="row">
-            <div class="col-md-8 col-lg-9">
+            <div class="col-md-8 col-lg-9" id="main-area">
                 <h1>Blog</h1>
-
-                <!-- 블로그 게시글 여러개 가져 올 예정이기 때문에 for문 사용 -->
-                {% for p in post_list %}
+                {% if post_list.exists %} <!-- post_list에 게시물이 있다면 if 문에 진입 -->
+                {% for p in post_list %} <!-- 블로그 게시글 여러개 가져 올 예정이기 때문에 for문 사용 -->
                 
                 <!-- Blog Post -->
                 <div class="card mb-4">
@@ -112,6 +111,11 @@
                 </div>
                 {% endfor %}
                 <!-- for문 끝낼 거니까 endfor 명령 추가 -->
+                {% else %}
+                    <h3>아직 게시물이 없습니다</h3>
+                {% endif %}
+                <!-- if문 끝낼 거니까 endfor 명령 추가 -->
+
                 <!-- Blog Post -->
                 <!-- <div class="card mb-4">
                     <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
