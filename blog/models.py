@@ -22,9 +22,9 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # 현재 시간으로 알아서 세팅되도록 한다. auto_now 추가
     
-    author = models.ForeignKey(User, on_delete = models.CASCADE)
-    # on_delete = 작성자 계정 탈퇴하면 게시글도 삭제하겠다. 
-    # 탈퇴하면 none 처리할거다
+    author = models.ForeignKey(User, on_delete = models.SET_NULL, null = True)
+    # on_delete = models.CASCADE 작성자 계정 탈퇴하면 게시글도 삭제하겠다. 
+    # on_delete = models.SET_NULL 작성자 계정 탈퇴하면 작성자만 none 처리할거다
     
     def __str__(self) :
         return f'[{self.pk}]{self.title}::{self.author}'

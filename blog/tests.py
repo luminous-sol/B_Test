@@ -1,11 +1,17 @@
 from django.test import TestCase, Client   
 from bs4 import BeautifulSoup
+from django.contrib.auth.models import User
 from .models import Post
 
 
 class TestView(TestCase) :
-    def test_post_list(self):
-        self.client -= Client()
+    def setUp(self) :
+        self.user_trump = User.objects.create_user(username='trump'
+, password='somepassword')
+        self.user_obama = User.objects.create_user(username='obama'
+, password='somepassword')
+        
+        self.client = Client()
         # client = 컴퓨터
         # 컴퓨터에서 테스트해서 날리면 goorm 에서 돌아간다. 
         
@@ -55,12 +61,17 @@ class TestView(TestCase) :
         post_001 = Post.objects.create(
             title = '첫 번째 포스트 입니다.',
             content = 'Hello World. We are the world',
+            author = self.user_trump
         )
         
         post_002 = Post.objects.create(
             title = '두 번째 포스트 입니다.',
             content = 'Im the one one and only one.',
+            author = self.user_obama,
         )
+        
+
+        
         self.assertEqual(Post.objects.count(),2)
         
         # 3.2 포스트 목록 페이지를 새로고침 했을 때
@@ -75,6 +86,9 @@ class TestView(TestCase) :
         self.assertIn(post_001.title, main_area.text)
         self.assertIn(post_002.title, main_area.text)
 
+        self.assertIn(self.user_trump.username.upper(), main_area.text)
+        self.assertIn(self.user_obama.username.upper(), main_area.text)        
+        
         # 3.4 '아직 게시물이 없습니다.'라는 문구가 더 이상 나타나지 않는다. 
         self.assertNotIn('아직 게시물이 없습니다', main_area.text)
     
@@ -87,6 +101,7 @@ class TestView(TestCase) :
         post_001 = Post.objects.create(
             title = '첫 번째 포스트 입니다.',
             content = 'Hello World. We are the world',
+            author = self.user_trump
         )
         
         # 1.2 포스트 url은 (상세 페이지 주소) '/blog/1/' 이렇게 pk가 붙어있다. 
@@ -122,6 +137,10 @@ class TestView(TestCase) :
         self.assertIn(post_001.content, post_area.text)
         # html parser 했으니까 text 로 적어주는 것 
         
+        self.assertIn(self.user_trump.username.upper(), post_area.text)
+        #--------------------------------------
+        
+
     #--------------------------------------
     
     def navbar_test(self, soup):
