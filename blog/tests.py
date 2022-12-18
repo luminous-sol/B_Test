@@ -28,15 +28,15 @@ class TestView(TestCase) :
         # title 의 text가 Blog와 같은가?
         
         # 1.4 <Nav> Navbar 가 있는지 확인
-        navbar = soup.nav 
-        # soup 에 nav가 있나? 결과는 navbar에 들어감 
+        # navbar = soup.nav 
+        # # soup 에 nav가 있나? 결과는 navbar에 들어감 
         
-        # 1.5 Blog, AboutMe라는 문구가 네비게이션 바에 있는가
-        self.assertIn('Blog', navbar.text)
-        # assertIn() : 안에 있나?
-        # Blog 라는 글자가 navbar안에 있나?
-        self.assertIn('About Me', navbar.text)
-        # About Me 라는 글자가 navbar 안에 있나?
+        # # 1.5 Blog, AboutMe라는 문구가 네비게이션 바에 있는가
+        # self.assertIn('Blog', navbar.text)
+        # # assertIn() : 안에 있나?
+        # # Blog 라는 글자가 navbar안에 있나?
+        # self.assertIn('About Me', navbar.text)
+        # # About Me 라는 글자가 navbar 안에 있나?
         
         #--------------------------------------
         
@@ -122,6 +122,23 @@ class TestView(TestCase) :
         self.assertIn(post_001.content, post_area.text)
         # html parser 했으니까 text 로 적어주는 것 
         
+    #--------------------------------------
+    
+    def navbar_test(self, soup):
+        navbar = soup.nav
+        self.assertIn('Blog', navbar.text) # navbar text 중에 'Blog'가 있나
+        self.assertIn('About Me', navbar.text) # navbar text 중에 'About Me 가 있나'
         
+        logo_btn = navbar.find('a', text='Do It Django')
+        self.assertEqual(logo_btn.attrs['href'],'/') # 뒤에 아무것도 안 붙는 홈으로 가는 것
+        
+        home_btn = navbar.find('a', text='Home')
+        self.assertEqual(home_btn.attr['href'], '/') # 뒤에 아무것도 안 붙는 홈으로 가는 것
+        
+        blog_btn = navbar.find('a', text='Blog')
+        self.assertEqual(blog_btn.attr['href'], '/blog/') # 뒤에 blog/ 붙는 링크
+        
+        about_me_btn = navbar.find('a', text='About Me')
+        self.assertEqual(about_me_btn.attr['href'], '/about_me/') # 뒤에 about_me/ 붙는 링크       
     
         

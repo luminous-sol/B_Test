@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import os
 # def (힘수)사용해서 작성하는 방법
 
@@ -10,6 +11,7 @@ class Post(models.Model):
     # admin에서 hook_text를 넣을 수 있는 공간을 만들어 주자
     content = models.TextField()
     # 콘텐츠는 텍스트필드불러온다(글적는 칸)
+    
     head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d', blank=True)
     # 실제로는 _media 방 안에 만들어진다. 
     # blank=True 필수항목이 아니기 때문에 비워도 된다. 
@@ -20,8 +22,12 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     # 현재 시간으로 알아서 세팅되도록 한다. auto_now 추가
     
+    author = models.ForeignKey(User, on_delete = models.CASCADE)
+    # on_delete = 작성자 계정 탈퇴하면 게시글도 삭제하겠다. 
+    # 탈퇴하면 none 처리할거다
+    
     def __str__(self) :
-        return f'[{self.pk}]{self.title}'
+        return f'[{self.pk}]{self.title}::{self.author}'
         # Post object(1) 이렇게 표시되는 콘텐츠를 제목이 나오도록 변경시켜준다.
         
     def get_absolute_url(self):
