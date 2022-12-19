@@ -13,4 +13,7 @@ urlpatterns = [
     
     path('<int:pk>/', views.PostDetail.as_view()),
     # blog /n 붙어서 페이지(순서)나오게
+    
+    path('category/<str:slug>/', views.category_page)
+    # blog/urls.py 에 링크 걸 path 추가
 ]

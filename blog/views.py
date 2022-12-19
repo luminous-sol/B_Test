@@ -1,21 +1,50 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Post 
+from .models import Post , Category 
 
 class PostList(ListView):
     model = Post 
     ordering = '-pk'
     # ListView = Post 나열 밑에 선언해뒀던 index 함수의 역할을 한다. 
-    # def get_context_data(self, **kwargs):
-    #     context = super(PostList, self).get_context_data()
-    #     context['categories'] = Category.objects.all()
-    #     context['no_category_post_count'] = Post.context.filter(category=None).count()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        return context
 
 class PostDetail(DetailView):
-    model = Post 
+    model = Post
+    ordering = '-pk'
     # 함수 single_post_page 대체
-
+    
+    def get_context_data(self, **kwargs):
+        context = super(PostDetail, self).get_context_data()
+        # super가 상위 PostList의 model가 ordering을 불러 올 수 있다. 
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+        
+        return context
+    
+def category_page(request, slug):
+    if slug == 'no_category' :
+        category = "미분류" # 카테고리 페이지에서 슬러그가 no_category라고 입력되면 미분류
+        post_list = Post.objects.filter(category=None) # 카테고리 없는 걸로 분류하라
+        
+    else :
+        category = Category.objects.get(slug=slug) # 아니면 슬러그를 그대로 해석
+        post_ist = Post.objects.filter(category=category)
+        
+    return render(
+        request,
+        'blog/post_list.html',
+        {
+            'post_list': post_list,
+            'categories': Category.objects.all(),
+            'no_category_post_count' : Post.objects.filter(category=None).count(),
+            'category':category,
+        }
+    )
+    
 # 함수방법 def 으로 만들기
 # 클라이언트에서 넘어온 정보(request) urlpatterns을 타고 views의 index 함수로 넘어옴
 
