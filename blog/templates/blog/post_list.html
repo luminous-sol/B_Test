@@ -17,7 +17,10 @@
             <h1>Blog {% if category %}
                 <span class="badge badge-secondary">{{ category }}</span>
                 {% endif %}
-                <span class="badge badge-secondary"></span></h1>
+                {% if tag %}
+                <span class="badge badge-secondary">{{ tag }}({{ tag.post_set.count }})</span>
+                {% endif %}
+                </h1>
                 {% if post_list.exists %} <!-- post_list에 게시물이 있다면 if 문에 진입 -->
                 {% for p in post_list %} <!-- 블로그 게시글 여러개 가져 올 예정이기 때문에 for문 사용 -->
                 
@@ -28,9 +31,8 @@
                     {% else %}
                     <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
                     {% endif %}
-                    <div class="card-img-top">
-                        
                     <div class="card-body">
+                        
                     {% if p.category %}
                     <span class='badge badge-secondary float-right'>{{ p.category }}</span>
                     {% else %}
@@ -38,14 +40,21 @@
                     {% endif %}
                         
                     <h2 class="card-title">{{ p.title }}</h2><!-- 포스트 제목 가지고 오기 -->
-                        {% if p.hook_text %}
-                            <h5 class="text-mueted">{{ p.hook_text }}</h5>
-                        {% endif %}
-                        
-                        
+                    {% if p.hook_text %}
+                        <h5 class="text-mueted">{{ p.hook_text }}</h5>
+                    {% endif %}
                         
                         <p class="card-text">{{ p.content | truncatewords:45 }}</p><!-- 포스트 콘텐츠 가지고 오기 -->
+                        {% if p.tags.exists %} 
+                            <i class="fas fa-tag"></i>
+                               {% for tag in p.tags.iterator %}
+                                    <a href="{{ tag.get_absoulute_url }}">
+                                    <span class="badge badge-pill badge-light">{{ tag }}</span>
+                                    </a>
+                        {% endfor %}
                         <br>
+                        <br>
+                    {% endif %}
                         
                         <!----------------------------------->
                         
@@ -56,7 +65,7 @@
                         Posted on {{ p.create_at }} by
                         <a href="#">{{ p.author | upper }}</a>
                     </div>
-                <a href="{{ p.category.name }}">{{ p.category.name }}</a>
+
                 </div>
                 {% endfor %}
                 <!-- for문 끝낼 거니까 endfor 명령 추가 -->
@@ -76,7 +85,7 @@
                         <a class="page-link" href="#">Newer &rarr;</a>
                     </li>
                 </ul>
-            </div>
+            
             
     {% endblock %}
                 

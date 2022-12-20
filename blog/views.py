@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Post , Category 
+from .models import Post , Category , Tag
 
 class PostList(ListView):
     model = Post 
@@ -25,14 +25,13 @@ class PostDetail(DetailView):
         
         return context
     
-def category_page(request, slug):
-    if slug == 'no_category' :
-        category = "미분류" # 카테고리 페이지에서 슬러그가 no_category라고 입력되면 미분류
-        post_list = Post.objects.filter(category=None) # 카테고리 없는 걸로 분류하라
-        
-    else :
-        category = Category.objects.get(slug=slug) # 아니면 슬러그를 그대로 해석
-        post_ist = Post.objects.filter(category=category)
+def category_page(request,slug):
+    if slug == 'no_category':
+        category = "미분류"
+        post_list = Post.objects.filter(category=None)
+    else:
+        category = Category.objects.get(slug=slug)
+        post_list = Post.objects.filter(category=category)
         
     return render(
         request,
@@ -40,8 +39,24 @@ def category_page(request, slug):
         {
             'post_list': post_list,
             'categories': Category.objects.all(),
-            'no_category_post_count' : Post.objects.filter(category=None).count(),
-            'category':category,
+            'no_category_post_count': Post.objects.filter(category=None).count(),
+            'category': category,
+        }
+     )
+
+def tag_page(request, slug):
+    tag = Tag.objects.get(slug=slug)
+    post_list = tag.post_set.all()
+    
+    return render(
+        request,
+        'blog/post_list.html',
+        {
+            'post_list': post_list,
+            'tag': tag,
+            'categories': Category.objects.all(),
+            'no_category_post_count': Post.objects.filter(category=None).count(),
+            
         }
     )
     

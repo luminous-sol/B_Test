@@ -13,12 +13,22 @@ class Category(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return f'/blog/category/{self.slug}'
+        return f'/blog/category/{self.slug}/'
     
     class Meta :
         verbose_name_plural = 'Categories'
 
-
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+    
+    def __str__(self):
+        return self.name
+    
+    def get_absolute_url(self):
+        return f'/blog/tag/{self.slug}/'
+        
+        
 # class 사용해서 작성하는 방법
 class Post(models.Model):
     title = models.CharField(max_length = 70)
@@ -44,6 +54,8 @@ class Post(models.Model):
     # on_delete = models.SET_NULL 작성자 계정 탈퇴하면 작성자만 none 처리할거다
     category = models.ForeignKey(Category, null = True, blank = True, on_delete= models.SET_NULL)
     # blank=True 하면 카테고리가 비어 있어도 된다. 누락을 수락한다. 카테고리 지워져도 연관된 게시글은 계속 남아있게 한다. 
+    
+    tags = models.ManyToManyField(Tag, blank = True)
     
     def __str__(self) :
         return f'[{self.pk}]{self.title}::{self.author}'
