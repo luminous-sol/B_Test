@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
+from markdownx.models import MarkdownxField
 # def (힘수)사용해서 작성하는 방법
-
+from markdownx.utils import markdown 
 
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -37,7 +38,8 @@ class Post(models.Model):
     # 제목 최대 길이
     hook_text = models.CharField(max_length = 100, blank = True)
     # admin에서 hook_text를 넣을 수 있는 공간을 만들어 주자
-    content = models.TextField()
+    content = MarkdownxField()
+    # content = models.TextField()
     # 콘텐츠는 텍스트필드불러온다(글적는 칸)
     
     
@@ -74,3 +76,5 @@ class Post(models.Model):
     def get_file_ext(self):
         return self.get_file_name().split('.')[-1]
     
+    def get_content_markdown(self):
+        return markdown(self.content)

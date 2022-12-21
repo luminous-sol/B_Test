@@ -41,7 +41,11 @@ INSTALLED_APPS = [
     'blog',
     'single_pages',
     'django_extensions',
+    'crispy_forms',
+    'markdownx',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

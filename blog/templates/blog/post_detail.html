@@ -24,9 +24,15 @@
         </p>
 
         <hr>
+            <!-- 지금 접속한 유저가 작성자가 맞다면 수정 버튼 보이게 하기 -->
+            {% if user.is_authenticated and user == post.author %}
+                <a class="btn btn-warning btn-sm float-right"href="/blog/update_post/{{ post.pk }}/" role="button">
+                    <i class="fas fa-pen"></i>
+                    Edit Post</a>
+            {% endif %}
 
         <!-- Date/Time -->
-        <p>Posted on{{ post.created_at }}-포스트한 날짜</p>
+        <p>Posted on{{ post.created_at }}</p>
 
         <hr>
 
@@ -41,11 +47,12 @@
         <hr>
 
         <!-- Post Content -->
-        <p>{{ post.content }}</p>
+        <p>{{ post.get_content_markdown | safe }}</p>
+        <!-- safe : html을 마크다운으로 변환해서 가져옴 -->
         
-        {% if post.tags.exists %}
+        {% if post.tag.exists %}
             <i class="fas fa-tags"></i>
-                {% for tag in post.tags.all %}
+                {% for tag in post.tag.all %}
         <a href="{{ tag.get_absolute_url }}"><span class="badge badge-pill badge-light">{{ tag }}</span></a>
                 {% endfor %}
             <br>
@@ -61,6 +68,7 @@
     </div>
 
     <div id="comment-area">
+        
         <!-- Comments Form -->
         <div class="card my-4">
           <h5 class="card-header">Leave a Comment:</h5>

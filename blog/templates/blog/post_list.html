@@ -53,14 +53,13 @@
                         {% if p.hook_text %}
                         <h5 class="text-muted">{{ p.hook_text }}</h5>
                         {% endif %}
-                        <p class="card-text">{{ p.content | truncatewords:45 }}</p><!-- 포스트 콘텐츠 가지고 오기 -->
+                        <p class="card-text">{{ p.get_content_markdown | truncatewords:45 | safe }}</p><!-- 포스트 콘텐츠 가지고 오기 -->
                         
                         {% if p.tag.exists %} 
                             <i class="fas fa-tags"></i>
                                 {% for tag in p.tag.iterator %}
-                                    <a href="{{ tag.get_absoulute_url }}">
-                                    <span class="badge badge-pill badge-light">{{ tag }}</span>
-                                    </a>
+                                    <a href="{{ tag.get_absolute_url }}"><span class="badge badge-pill badge-light">{{ tag }}</span></a>
+                                    
                                 {% endfor %}
                         <br>
                         <br>

@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.text import slugify
+
 from .models import Post , Category , Tag
 
 
@@ -11,8 +13,84 @@ class PostCreate(CreateView, LoginRequiredMixin): # 로그인이 요구된다
     # 로그인 한 후 보여주는 작성 화면이니까 작성자가 굳이 들어갈 필요 없음
     # 작성 시간도 자동으로 설정되니까 필요 없음
     # 태그는 사용자가 직접 추가하는 형식으로
+    
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+    
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):
+            form.instance.author = current_user
+            
+            response = super(PostCreate,self).form_valid(form)
+            
+            tag_str = self.request.POST.get('tag_str')
+            if tag_str:
+                tag_str = tag_str.strip()
+                tag_str = tag_str.replace(',',';')
+                tag_list = tag_str.split(';')
+                
+                for t in tag_list :
+                    t = t.strip()
+                    tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                                                # 있으면 불러오고 없으면 생성한다.
+                    if is_tag_created:
+                        tag.slug = slugify(t, allow_unicode=True)
+                        tag.save()
+                    self.object.tag.add(tag)
+            
+            return response
+        else:
+            return redirect('/blog/')
+        
 
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    model = Post 
+    fields = ['title', 'hook_text','content','head_image','file_upload','category','tag']
+    
+    template_name = 'blog/post_update_form.html'
+    # blog에 post_update_form으로 찾아가기
+    # 없으니까 만들어 줄 것
+    
+    def get_context_data(self, **kwargs):
+        context = super(PostUpdate,self).get_context_data()
+        if self.object.tag.exists():
+            tag_str_list = list()
+            for t in self.object.tag.all():
+                tag_str_list.append(t.name)
+            context['tag_str_default'] = ';'.join(tag_str_list)
+        return context
+    
+    def form_valid(self, form):
+        response = super(PostUpdate,self).form_valid(form)
+        self.object.tag.clear()
+            
+        tag_str = self.request.POST.get('tag_str')
+        if tag_str:
+            tag_str = tag_str.strip()
+            tag_str = tag_str.replace(',',';')
+            tag_list = tag_str.split(';')
+                
+            for t in tag_list:
+                t = t.strip()
+                tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                                            # 있으면 불러오고 없으면 생성한다.
+                if is_tag_created:
+                    tag.slug = slugify(t, allow_unicode=True)
+                    tag.save()
+                self.object.tag.add(tag)
+            
+        return response
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author :
+            # 지금 로그인 되어 있는 사용자가 인증되었는지
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else :
+            raise PermissionDenied
+            # 인증이 안되었으면 권한이 거절된다.  
 
+            
 class PostList(ListView):
     model = Post 
     ordering = '-pk'

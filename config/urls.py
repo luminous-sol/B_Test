@@ -25,8 +25,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     
-    path('', include('single_pages.urls'))
+    path('', include('single_pages.urls')),
     # single_pages에 urls로 가라는 명령 있으려면 single_pages에 urls 파일이 있어야 한다. 
+    path('markdownx/', include('markdownx.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL,
                      document_root = settings.MEDIA_ROOT)

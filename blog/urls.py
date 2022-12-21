@@ -21,4 +21,6 @@ urlpatterns = [
     # slug로 들어온다. tag_page는 이제 만들 예정
     
     path('create_post/', views.PostCreate.as_view()),
+    
+    path('update_post/<int:pk>/', views.PostUpdate.as_view())
 ]
