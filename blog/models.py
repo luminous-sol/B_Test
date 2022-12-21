@@ -27,6 +27,8 @@ class Tag(models.Model):
     
     def get_absolute_url(self):
         return f'/blog/tag/{self.slug}/'
+    
+
         
         
 # class 사용해서 작성하는 방법
@@ -55,7 +57,7 @@ class Post(models.Model):
     category = models.ForeignKey(Category, null = True, blank = True, on_delete= models.SET_NULL)
     # blank=True 하면 카테고리가 비어 있어도 된다. 누락을 수락한다. 카테고리 지워져도 연관된 게시글은 계속 남아있게 한다. 
     
-    tags = models.ManyToManyField(Tag, blank = True)
+    tag = models.ManyToManyField(Tag, blank = True)
     
     def __str__(self) :
         return f'[{self.pk}]{self.title}::{self.author}'

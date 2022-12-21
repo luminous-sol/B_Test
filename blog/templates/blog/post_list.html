@@ -5,8 +5,13 @@
 
     
     {% block main_area %}
-
-
+    {% if user.is_authenticated %} <!--만약 사용자가 인증되었다면 -->
+        {% if user.is_superuser or user.is_staff %} <!-- user가 슈퍼유저거나 스태프이면-->
+            <a class="btn btn-info btn-sm float-right" href="/blog/create_post/" role="button"> <!--버튼 오른쪽에 뜨게 하는 버튼 만들어라 링크는 create_post로 가고 역할은 버튼-->
+                <i class="fas fa-pen"></i>&nbsp; &nbsp; New Post
+            </a>
+        {% endif %} <!-- 슈퍼유저, 스태프유저 if 구문 끝-->
+    {% endif %} <!--사용자 인증 if 구문 끝-->
 
                
 
@@ -14,44 +19,49 @@
 
 
 
-            <h1>Blog {% if category %}
-                <span class="badge badge-secondary">{{ category }}</span>
-                {% endif %}
-                {% if tag %}
-                <span class="badge badge-secondary">{{ tag }}({{ tag.post_set.count }})</span>
-                {% endif %}
+            <h1>Blog 
+                    {% if category %}
+                        <span class="badge badge-secondary">{{ category }}</span>
+                        {% endif %}
+                    
+                    {% if tag %}
+                        <span class="badge badge-secondary">{{ tag }}({{ tag.post_set.count }})</span>
+                    {% endif %}
                 </h1>
-                {% if post_list.exists %} <!-- post_list에 게시물이 있다면 if 문에 진입 -->
-                {% for p in post_list %} <!-- 블로그 게시글 여러개 가져 올 예정이기 때문에 for문 사용 -->
+
+            {% if post_list.exists %}    
+
+                {% for p in post_list %}
                 
                 <!-- Blog Post -->
-                <div class="card mb-4">
+                <div class="card mb-4" id="post-{{ p.pk }}">
                     {% if p.head_image %}
-                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
+                        <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
                     {% else %}
-                    <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
+                        <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
                     {% endif %}
                     <div class="card-body">
                         
-                    {% if p.category %}
-                    <span class='badge badge-secondary float-right'>{{ p.category }}</span>
-                    {% else %}
-                    <span class='badge badge-secondary float-right'>미분류</span>
-                    {% endif %}
+                        {% if p.category %}
+                        <span class='badge badge-secondary float-right'>{{ p.category }}</span>
+                                                    <!-- 오른쪽 끝으로 위치시켜줌 -->
+                        {% else %}
+                        <span class='badge badge-secondary float-right'>미분류</span>
+                        {% endif %}
                         
-                    <h2 class="card-title">{{ p.title }}</h2><!-- 포스트 제목 가지고 오기 -->
-                    {% if p.hook_text %}
-                        <h5 class="text-mueted">{{ p.hook_text }}</h5>
-                    {% endif %}
-                        
+                        <h2 class="card-title">{{ p.title }}</h2>
+                        {% if p.hook_text %}
+                        <h5 class="text-muted">{{ p.hook_text }}</h5>
+                        {% endif %}
                         <p class="card-text">{{ p.content | truncatewords:45 }}</p><!-- 포스트 콘텐츠 가지고 오기 -->
-                        {% if p.tags.exists %} 
-                            <i class="fas fa-tag"></i>
-                               {% for tag in p.tags.iterator %}
+                        
+                        {% if p.tag.exists %} 
+                            <i class="fas fa-tags"></i>
+                                {% for tag in p.tag.iterator %}
                                     <a href="{{ tag.get_absoulute_url }}">
                                     <span class="badge badge-pill badge-light">{{ tag }}</span>
                                     </a>
-                        {% endfor %}
+                                {% endfor %}
                         <br>
                         <br>
                     {% endif %}
@@ -66,7 +76,9 @@
                         <a href="#">{{ p.author | upper }}</a>
                     </div>
 
-                </div>
+                    </div>
+                    <a href="{{ p.category.name }}">{{ p.category.name }}</a>
+                
                 {% endfor %}
                 <!-- for문 끝낼 거니까 endfor 명령 추가 -->
                 {% else %}
@@ -76,7 +88,7 @@
 
                 <!-- Blog Post -->
                     
-              <!-- Pagination -->
+                <!-- Pagination -->
                 <ul class="pagination justify-content-center mb-4">
                     <li class="page-item">
                         <a class="page-link" href="#">&larr; Older</a>

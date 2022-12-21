@@ -1,6 +1,17 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post , Category , Tag
+
+
+class PostCreate(CreateView, LoginRequiredMixin): # 로그인이 요구된다
+    model = Post 
+    fields = ['title', 'hook_text','content','head_image','file_upload','category','tag']
+    # 포스트 작성 화면에서 보여줄 필드명들을 적어주기
+    # 로그인 한 후 보여주는 작성 화면이니까 작성자가 굳이 들어갈 필요 없음
+    # 작성 시간도 자동으로 설정되니까 필요 없음
+    # 태그는 사용자가 직접 추가하는 형식으로
+
 
 class PostList(ListView):
     model = Post 
@@ -52,14 +63,12 @@ def tag_page(request, slug):
         request,
         'blog/post_list.html',
         {
-            'post_list': post_list,
-            'tag': tag,
-            'categories': Category.objects.all(),
-            'no_category_post_count': Post.objects.filter(category=None).count(),
-            
+            'post_list':post_list,
+            'tag':tag,
+            'categories':Category.objects.all(),
+            'no_category_post_count':Post.objects.filter(category=None).count(),
         }
     )
-    
 # 함수방법 def 으로 만들기
 # 클라이언트에서 넘어온 정보(request) urlpatterns을 타고 views의 index 함수로 넘어옴
 
