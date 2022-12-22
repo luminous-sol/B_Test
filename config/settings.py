@@ -43,7 +43,19 @@ INSTALLED_APPS = [
     'django_extensions',
     'crispy_forms',
     'markdownx',
+    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    
+    'allauth.socialaccount.providers.google',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -132,3 +144,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
 # BASE_DIR = 기본 주소인 127.0.0.1 같은 내 인터넷 주소 
 # + /blog 같은 것의 주소를 붙여준 것
+
+ACCOUNT_EMAIL_REQUIRED = True
+# 이메일을 반드시 받겠다. 
+ACCOUNT_EMAIL_VERIFICATION ='none'
+# 이메일 검증 하겠다. 만약 True로 하면 추가적으로 다른 것들을 진행해주어야 한다. 
+
+LOGIN_REDIRECT = '/blog/'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
