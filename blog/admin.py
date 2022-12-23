@@ -1,10 +1,10 @@
 from django.contrib import admin
 from markdownx.admin import MarkdownxModelAdmin
-from .models import Post , Category, Tag
+from .models import Post , Category, Tag, Comment
 
+admin.site.register(Comment)
 
-
-admin.site.register(Post)
+admin.site.register(Post, MarkdownxModelAdmin)
 # Register your models here.
 # admin 페이지에 Post 기능(제목 / 콘텐츠글쓰기 / 날짜불러오기)추가
 

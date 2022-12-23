@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404 
+# object 를 받아들이거나 404 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.text import slugify
-
-from .models import Post , Category , Tag
+from .forms import CommentForm
+from django.core.exceptions import PermissionDenied
+from .models import Post , Category , Tag, Comment
+from django.db.models import Q
 
 
 class PostCreate(CreateView, LoginRequiredMixin): # 로그인이 요구된다
@@ -92,8 +95,9 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
             
 class PostList(ListView):
-    model = Post 
+    model = Post
     ordering = '-pk'
+    paginate_by = 5
     # ListView = Post 나열 밑에 선언해뒀던 index 함수의 역할을 한다. 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data()
@@ -112,7 +116,40 @@ class PostDetail(DetailView):
         context['categories'] = Category.objects.all()
         context['no_category_post_count'] = Post.objects.filter(category=None).count()
         
+        context['comment_form'] = CommentForm
+        
         return context
+    
+class PostSearch(PostList): # 포스트 검색은 포스트 작성 후 이루어 져야 하므로 Post~ 의 클래스가 끝난 후 구현해준다. 
+    paginate_by = None # 검색결과 다 보여줘class PostSearch(PostList): # 포스트 검색은 포스트 작성 후 이루어 져야 하므로 Post~ 의 클래스가 끝난 후 구현해준다. 
+    
+    def get_queryset(self): # DB에서 찾아오기
+        q = self.kwargs['q']
+        post_list =Post.objects.filter(
+            Q(title__contains = q) | Q(tag__name__contains = q) | Q(content__contains = q)
+        ).distinct() # DB에서 중복 피하는 것 (제목이 q를 포함하고 있거나 태그 이름이 q를 포함하거나) distinct(): 배열 중복값을 제거한다.  
+        return post_list # 타이틀과 태그에서 찾은 중복없는 자료를 넘겨준다.
+    def get_context_data(self, **kwargs):
+        context = super(PostSearch, self).get_context_data()
+        q = self.kwargs['q'] 
+        context['search_info'] = f'Search : {q} ({ self.get_queryset().count() })' # 검색 결과 개수 표시
+        
+        return context
+    
+
+
+    
+    
+class CommentUpdate(LoginRequiredMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author : # 승인된 관리자이고 작성자랑 동일하면
+            return super(CommentUpdate, self).dispatch(request, *args, **kwargs) # 코멘트 업데이트
+        else :
+            raise PermissionDenied # 아니면 승인 거절
+    
     
 def category_page(request,slug):
     if slug == 'no_category':
@@ -147,6 +184,38 @@ def tag_page(request, slug):
             'no_category_post_count':Post.objects.filter(category=None).count(),
         }
     )
+
+
+def new_comment(request, pk) : #댓글 적힐 게시물의 번호 가지고 오기
+    if request.user.is_authenticated :
+        post = get_object_or_404(Post, pk=pk) # pk가 없을 때 object 가지고 오거나
+        if request.method == 'POST': # 포스트 방식으로 들어왔다면 
+            comment_form = CommentForm(request.POST)
+    
+            if comment_form.is_valid() : # 정상적으로 가져왔으면 자료 가져오면 된다
+                comment = comment_form.save(commit = False)
+                # commit = DB 에 완벽하게 저장해도 된다 것을 알려준다. False >> 저장하지마라
+                comment.post = post
+                comment.author = request.user 
+                comment.save() # 여기서 진짜 저장
+                return redirect(comment.get_absolute_url())
+        else : # 'GET' : 주소창에 직접 입력해서 들어온 경우
+            return redirect(post.get_absolute_url()) # 다시 게시글로 넘겨주기
+    else :
+        raise PermissionDenied # 승인거절
+        
+        
+def delete_comment (request, pk) :
+    comment = get_object_or_404(Comment, pk=pk)
+    post = comment.post
+
+    if request.user.is_authenticated and request.user == comment.author :
+        comment.delete() # 삭제해주기
+        return redirect(post.get_absolute_url())
+    else:
+        return PermissionDenied
+    
+    
 # 함수방법 def 으로 만들기
 # 클라이언트에서 넘어온 정보(request) urlpatterns을 타고 views의 index 함수로 넘어옴
 

@@ -29,7 +29,6 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return f'/blog/tag/{self.slug}/'
     
-
         
         
 # class 사용해서 작성하는 방법
@@ -78,3 +77,21 @@ class Post(models.Model):
     
     def get_content_markdown(self):
         return markdown(self.content)
+
+# Post 를 불러오기 때문에 class Post 뒤에 작성해야한다. 
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete = models.CASCADE)
+    # 댓글을 단 사람이 회원 탈퇴 시, 댓삭
+    # 만약 남기고 싶으면 on_delete = models.SET_NULL 
+    author = models.ForeignKey(User, on_delete = models.CASCADE)
+    content = models.TextField()
+    create_at = models.DateTimeField(auto_now_add = True)
+    modified_at = models.DateTimeField(auto_now = True)
+    # 자기 댓글 수정 시간
+    
+    def __str__(self) :
+        return f'{self.author}::{self.content}'
+    
+    def get_absolute_url(self):
+        return f'{self.post.get_absolute_url()}#comment-{self.pk}'
+        

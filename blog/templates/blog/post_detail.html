@@ -1,4 +1,5 @@
 {% extends 'blog/base.html' %} <!-- 블로그에 base.html 파일 상속받기 -->
+{% load crispy_forms_tags %}
 <!-- header/footer/sidebar 불러옴 -->
 {% block head_title %}
     {{ post.title }} - Blog <!-- Blog는 post의 title이 없으면 기본값으로 생성돼ㅣ어 들어간다. -->
@@ -73,52 +74,86 @@
         <div class="card my-4">
           <h5 class="card-header">Leave a Comment:</h5>
           <div class="card-body">
-            <form>
+            <form id="comment" method="POST" action="{{ post.get_absolute_url }}/new_comment/">
+            {% csrf_token %}
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+                  {{ comment_form | crispy }}
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
           </div>
         </div>
-
-        <!-- Single Comment -->
-        <div class="media mb-4">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-          <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-          </div>
-        </div>
+ㄴ
+<!-- Single Comment -->
+        
 
         <!-- Comment with nested comments -->
-        <div class="media mb-4">
+        {% if post.comment_set.exists %}
+          {% for comment in post.comment_set.iterator %}
+        <div class="media mb-4" id="comment-{{ comment.pk }}">
           <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-          <div class="media-body">
-            <h5 class="mt-0">Commenter Name</h5>
-            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-
-            <div class="media mt-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-              <div class="media-body">
-                <h5 class="mt-0">Commenter Name</h5>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-              </div>
+            <div class=media-body>
+                {% if user.is_authenticated and comment.author == user %}
+                
+                <div class="float-right">
+                    
+                
+                    <a role='button' class="btn btn-sm btn-info" 
+                       id="comment-{{ comment.pk }}-update-btn" href="/blog/update_comment/{{ comment.pk }}/">
+                        edit</a>
+                
+                    <a role="button" href="#" id="comment-{{ comment.pk }}-delete-modal-btn"
+                        class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteCommentModal-{{ comment.pk }}">
+                            delete
+                        </a>
+                    
+                </div> 
+                <!-- Modal -->
+                <div class="modal fade" id="deleteCommentModal-{{ comment.pk }}" role="dialog"
+                    tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteCommentModalLabel">Are You Sure?</h5>
+                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                     <span aria-hidden="true">&times;</span>
+                                 </button>
+                            </div>
+                            
+                            <div class="modal-body">
+                                <del>{{ comment | linebreaks }}</del>
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> 
+                                <a role="button" class="btn btn-danger" href="/blog/delete_comment/{{ comment.pk }}/">
+                                    Delete </a>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>        
+                    
+                </div>
+                
+                {% endif %}
+                <h5 class="mt-0">
+                    {{ comment.author.username}} &nbsp;&nbsp; <small class="text-muted">
+                        {{ comment.create_at }}</small>
+                </h5>
+                <p>{{ comment.content | linebreaks }}</p>
+                {% if comment.create_at != commnet.modified_at %}
+                <p class="text-muted float-right">
+                    <small>Update: {{ comment.modified_at }}</small></p>
+                
+                
+                {% endif %}
             </div>
-
-            <div class="media mt-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-              <div class="media-body">
-                <h5 class="mt-0">Commenter Name</h5>
-                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-              </div>
-            </div>
-
-          </div>
+          
         </div>
-    </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+<hr>
     {% endblock %}
-
-    <!-- 블록 닫아주기 -->
      
-

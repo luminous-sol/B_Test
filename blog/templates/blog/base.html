@@ -28,15 +28,31 @@
                     <h5 class="card-header">Search</h5>
                     <div class="card-body">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Search for...">
+                            <input type="text" class="form-control" placeholder="검색🔍" id="search-input"> <!-- 넣어 줄 타입은 텍스트, 폼에서 모양 가지고 오기, 검색어 입력키-->
                             <span class="input-group-btn">
-                                <button class="btn btn-secondary" type="button">Go!</button>
+                                <button class="btn btn-secondary" type="button" onclick="searchPost()">확인</button> <!-- 클릭시 Post함수 검색 -->
                             </span>
                         </div>
                     </div>
                 </div>
-
-
+                <script>
+                function searchPost() {
+                    let searchValue = document.getElementById('search-input').value.trim();
+                    <!-- 입력값 가져와서 압뒤 공백 제거해주기 -->
+                    if (searchValue.length > 1) { // 검색할 때 한 글자 처리는 X
+                    location.href = "/blog/search/" + searchValue + "/";
+                    }
+                    else {
+                        alert("한 글자 이상 입력해주세요. 검색어(" + searchValue + ")의 길이가 너무 짧습니다.");
+                    }
+                };
+                document.getElementById('search-input').addEventListener('keyup', function(event){
+                    if(event.key == 'Enter'){ // key가 Enter라면 searchPost로 가라
+                        searchPost();
+                    }
+                })    
+                </script>
+                
                 <!-- Categories Widget -->
                 <div class="card my-4" id='categories-card'>
                     <h5 class="card-header">Categories</h5>

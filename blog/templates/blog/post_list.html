@@ -20,6 +20,9 @@
 
 
             <h1>Blog 
+                
+                    {% if search_info %} <small class="text-muted">{{ search_info }}</small>
+                    {% endif %}
                     {% if category %}
                         <span class="badge badge-secondary">{{ category }}</span>
                         {% endif %}
@@ -76,7 +79,7 @@
                     </div>
 
                     </div>
-                    <a href="{{ p.category.name }}">{{ p.category.name }}</a>
+
                 
                 {% endfor %}
                 <!-- for문 끝낼 거니까 endfor 명령 추가 -->
@@ -88,15 +91,30 @@
                 <!-- Blog Post -->
                     
                 <!-- Pagination -->
+                {% if is_paginated %}
                 <ul class="pagination justify-content-center mb-4">
+                    
+                    {% if page_obj.has_next %} <!-- 다음에 게시글이 있다면 -->
                     <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&larr; Older</a>
+                    </li>
+                    {% else %}
+                        <li class="page-item disabled">
                         <a class="page-link" href="#">&larr; Older</a>
                     </li>
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">Newer &rarr;</a>
+                    {% endif %}
+                    
+                    {% if page_obj.has_previous %}<!-- 앞 게시글이 있다면 -->
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Newer &rarr;</a>
                     </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Newer &larr;</a>
+                    </li>
+                {% endif %}                   
                 </ul>
-            
+            {% endif %}
             
     {% endblock %}
                 
