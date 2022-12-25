@@ -1,16 +1,67 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Hello I'm soli</title>
+    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'single_pages/css/landing.css' %}" media="screen">
 </head>
+    
+    
 <body>
-    <nav><a href="/blog/">Blog</a> <!-- Blog로 가는 링크-->
-    <a href="/about_me/">About_me</a> <!-- about_me로 가는 링크 -->
-    </nav> 
-    <h2>
-        Main Page
-    </h2>
-    <h3>still working</h3>
+    {% include 'blog/navbar.html' %}
+    
+    <section>
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-6 text-light">
+                    <h2 class="mt-5">I'm luminous sol</h2>
+                    <br>
+                    <p>소나무처럼 밝고 푸른 최솔이입니다.</p>
+            </div>
+            
+            <!-- 포스트리스트의 최신글 가져오기-->
+            <div class="col-lg-5 mt-5">
+                <h3 class="text-light">Blog - Recent Posts</h3>
+                {% for post in recent_posts %}
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h6>
+                            <a href="{{ post.get_absolute_url }}" class="text-decoration-none text-dark">{{ post.title }}</a> <!-- 포스트 제목 -->
+                            <!-- 링크 가지고오기, 텍스트꾸밈없음 없고 글자는 어둡게 -->
+                        </h6>
+                        <span class="badge badge-pill badge-warning float-right">
+                            {{ post.author.username }} <!-- 포스트 작성자 이름 -->
+                            &nbsp; &nbsp;
+                            {{ post.create_at }} <!-- 포스트 작성 날짜 -->
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        
+            
+        </div>
+    </div>
+        </div>
+    </section>
+    
+    
+
+    <div class="fixed-bottom">
+        {% include 'blog/footer.html' %}
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    
 </body>
 </html>

@@ -1,17 +1,243 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>This is me</title>
+    <title>About Me</title>
+    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'single_pages/css/about_me.css' %}" media="screen">
 </head>
-<body>
-    <nav>
-        <a href="/blog/">Blog</a>
-        <a href="/about_me/">About_me</a>
-    </nav>
     
-    <h2>History</h2>
-    <h2>Portfolio</h2>
-    <h3>DashBoard</h3>
-</body>
+    
+    
+<body>
+    {% include 'blog/navbar.html' %}
+    
+    
+    <section>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1> 센텀직업전문학교</h1>
+                    <br>
+                    <p>
+                        센텀은 디자인, 영상, IT를 전문으로 교육하는 기관입니다.<br>
+                        현장 실무형 인재양성이라는 기관의 비전을 달성하기 위해 기업과의 꾸준한 산학협력을 연계하여 체계적인 맞춤식 훈련을 하기 위해 노력하고 ......
+                    </p>
+                    
+                    <ul>
+                        <li> 훈련 과정</li>
+                        <ul>
+                            <li>디자인 - 반응형(1995 ~ )</li>
+                            <li>IT - 빅테이터 분석, 인공지능(1950 ~) </li>
+                        </ul>
+                        <li>경력사항</li>
+                        <ul>
+                            <li>센텀대학교 컴퓨터공학 학사(2002.03 ~ 2007.02) </li>
+                            <li>센텀대학교 대학원 컴퓨터공학 석사(2007.03 ~ 2009.02) </li>
+                        </ul>
+                        
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <img class="img-fluid" src="{% static 'single_pages/images/2.jpg' %}" alt="">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-right  margin-for-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Portfolio</h1>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card" data-toggle="modal" data-target="#excel2022">
+                        <img class="card-img-top" src="{% static 'single_pages/images/excel/excel.jpg' %}" alt="">
+                        <div class="card-body">
+                            <h6 class="card-title">파이썬을 이용한 엑셀업무 자동화[2022.12]</h6>
+                            <p>심장의 찾아 밝은 속에서 쓸쓸하랴? 영락과 역사를 든 끓는다. 무엇이 투명하되 능히 불어 긴지라 가지에 오직 
+                                작고 싹이 뿐이다. 보내는 산야에 장식하는 피가 바이며, 그림자는 찾아 거친 있음으로써 그리하였는가? 풍부하게
+                                가치를 인생을 못하다 말이다. 공자는 아름답고 무한한 뿐이다.</p>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+                <div class="col-lg-4">
+                    <div class="card" data-toggle="modal" data-target="#django2022">
+                        <img class="card-img-top" src="{% static 'single_pages/images/django/django.jpg' %}" alt="">
+                        <div class="card-body">
+                            <h6 class="card-title">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.[2022.12]</h6>
+                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. 
+                                Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.</p>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+                <div class="col-lg-4">
+                    <div class="card" data-toggle="modal" data-target="#python2022">
+                        <img class="card-img-top" src="{% static 'single_pages/images/python/python.png' %}" alt="">
+                        <div class="card-body">
+                            <h6 class="card-title">Sed ut perspiciatis unde omnis iste natus error[2022.12]</h6>
+                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
+                                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                                dicta sunt explicabo.</p>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            
+        </div>
+    </section>
+    
+    
+    
+<!-- Modal -->
+<div class="modal fade" id="excel2022" tabindex="-1" aria-labelledby="excel2022ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="excel2022ModalLabel">파이썬을 이용한 엑셀업무 자동화[2022.12]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-7">
+                <img class="img-fluid" src="{% static 'single_pages/images/excel/excel.jpg' %}" alt="">
+                
+            </div>
+            <div class="col-lg-5">
+                <p>
+                    심장의 찾아 밝은 속에서 쓸쓸하랴? 영락과 역사를 든 끓는다. 무엇이 투명하되 능히 불어 긴지라 가지에 오직 
+                                작고 싹이 뿐이다. 보내는 산야에 장식하는 피가 바이며, 그림자는 찾아 거친 있음으로써 그리하였는가? 풍부하게
+                                가치를 인생을 못하다 말이다. 공자는 아름답고 무한한 뿐이다
+                </p>
+            </div>
+       
+         </div>
+          
+          <div class="modal-footer  float-right">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+      </div>
+   </div>
+       
+  </div>
+ </div>  
+        
+<div class="modal fade" id="django2022" tabindex="-1" aria-labelledby="django2022ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="django2022ModalLabel">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.[2022.12]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-7">
+                <img class="img-fluid" src="{% static 'single_pages/images/django/django.jpg' %}" alt="">
+                
+            </div>
+            <div class="col-lg-5">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. 
+                                Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                </p>
+            </div>
+        
+         </div>
+          <div class="modal-footer ">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+      </div>
+    </div>
+       
+    </div>
+ </div>
+        
+        
+        
+        <div class="modal fade" id="python2022" tabindex="-1" aria-labelledby="python2022ModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="python2022ModalLabel">Sed ut perspiciatis unde omnis iste natus error[2022.12]</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-7">
+                <img class="img-fluid" src="{% static 'single_pages/images/python/python.png' %}" alt="">
+                
+            </div>
+            <div class="col-lg-5">
+                <p>
+                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, 
+                                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                                dicta sunt explicabo.
+                </p>
+            </div>
+       
+         </div>
+      </div>
+   
+        
+        
+        
+        
+        
+        
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+    
+        <div class="fixed-bottom">
+        {% include 'blog/footer.html' %}
+    </div>
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    
+    </body>
 </html>
