@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404 
 # object 를 받아들이거나 404 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.text import slugify
 from .forms import CommentForm
 from django.core.exceptions import PermissionDenied
@@ -9,7 +9,7 @@ from .models import Post , Category , Tag, Comment
 from django.db.models import Q
 
 
-class PostCreate(CreateView, LoginRequiredMixin): # 로그인이 요구된다
+class PostCreate(CreateView, LoginRequiredMixin, UserPassesTestMixin): # 로그인이 요구된다
     model = Post 
     fields = ['title', 'hook_text','content','head_image','file_upload','category','tag']
     # 포스트 작성 화면에서 보여줄 필드명들을 적어주기

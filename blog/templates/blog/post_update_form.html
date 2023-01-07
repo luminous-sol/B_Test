@@ -5,25 +5,72 @@
 {% block main_area %}
     <h1>Edit Post</h1>
     <hr>
-    <form method="post" enctype="multipart/form-data">{% csrf_token %}
-    <!-- endtype : 폼에서 파일을 전송할 때 꼭 필요함 -->
-    <!-- csrf : 웹사이트 공격 / csrf_token 을 적어놓기만 하면 장고가 알아서 막아준다.-->
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Editor</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <!-- 보기 편하게 CSS추가 -->
+    <style> 
+        *{
+            text-align : center;
+        }
+        #editor {
+            /* border : 1px solid; */
+            width : 50%;
+            margin : 0 auto;
+        }
+        /* !!여기!! 새로운 div태그 스타일 추가해줫습니다. */
+        #contents {
+            width : 50%;
+            height : 100px;
+            margin : 30px auto;
+            border : 1px solid;
+        }
+    </style>
+    
+    <!-- Editor's Style -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    
+</head>
+<body>
+    
+    <!-- !!여기!! 에디터 내용을 받을 div태그-->
+    <div id="editor"></div>
+    <!-- TOAST UI Editor CDN URL(JS) -->
+    <div id="contents"></div>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    
+    <!-- 사이트에서 복사한 JavaScript 소스 코드 const를 사용하는거 보니 ES6방식을 사용 -->
+    <script>
+        const editor = new toastui.Editor({
+            el: document.querySelector('#editor'),
+            previewStyle: 'vertical',
+            height: '500px',
+            initialValue: '글을 작성하세요.'
+        });
         
-
-            {{ form | crispy}} <!-- views.py 에 설정해 둔 fields 가 들어있는 폼이 알아서 들어간다. -->
-            <div id="div_id_tag_str">
-
-                <label for="id_tag_str">Tag 추가하기</label>
-                <input type="text" name="tag_str" id="id_tag_str" class="textinput textInput form-control" value="{{ tags_str_default }}">
-            </div>
-            <br>
-
+        // 이곳에 editor.getHtml()을 사용해서 에디터 내용 받아오기 
+        document.querySelector('#contents').insertAdjacentHTML('afterbegin' ,editor.getHtml());
+        console.log(editor.getHtml());
+        
+    </script>
+    
+</body>
+</html>
+        <div id="div_id_tag_str">
+            <label for="id_tag_str">Tag 추가하기</label>
+            <input type="text" name="tag_str" id="id_tag_str" class="textinput textInput form-control" value="{{ tags_str_default }}">
+        </div>
+        <br>
         
         <button type="submit" class="btn btn-warning float-right">
             <!--float-right: 오른 쪽 정렬-->
             Submit
         </button>
         
-    </form>
 
 {% endblock %}

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     
     'allauth.socialaccount.providers.google',
+    'board',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -150,5 +151,5 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION ='none'
 # 이메일 검증 하겠다. 만약 True로 하면 추가적으로 다른 것들을 진행해주어야 한다. 
 
-LOGIN_REDIRECT = '/blog/'
+LOGIN_REDIRECT_URL = '/blog/'
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'

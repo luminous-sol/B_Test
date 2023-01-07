@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+{% load crispy_forms_tags %}
+{% block main_area %}
+
+<h3>Free talk</h3>
+
+    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+    <!-- endtype : 폼에서 파일을 전송할 때 꼭 필요함 -->
+    <!-- csrf : 웹사이트 공격 / csrf_token 을 적어놓기만 하면 장고가 알아서 막아준다.-->
+        
+        <table>
+            {{ form | crispy }} <!-- views.py 에 설정해 둔 fields 가 들어있는 폼이 알아서 들어간다. -->
+        </table>
+        
+        <button type="submit" class="btn btn-info float-right">
+            <!--float-right: 오른 쪽 정렬-->
+            Submit
+        </button>
+        
+    </form>
+    {{ form.media }}
+
+{% endblock %}

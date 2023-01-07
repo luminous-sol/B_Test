@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+
+{% block main_area %}
+<br>
+        <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Num</th>
+      <th scope="col">Title</th>
+      <th scope="col">Writer</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for board in board_list %}
+    <tr>
+      <th scope="row">{{ board.pk }}</th> <!--게시글 번호-->
+      <td><a href="{{ board.get_absolute_url }}">{{ board.title }}</a></td> <!--게시글 제목에 링크 걸어주기-->
+      <td>{{ board.author }}</td> <!--게시글 작성자-->
+      <td>{{ board.create_at }}</td> <!--게시글 작성날짜-->
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<hr>
+
+
+
+{% if request.user.is_authenticated %} <!--로그인된 사용자이면-->
+    <a href="/board/create/" type="button" class="btn btn-outline-info float-right">Create</a> <!--Create 버튼 눌럿을 때 board/create/로 가게 하라-->
+{% else %} <!-- 로그인 안되어 있으면 -->
+    <a type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#loginModal">Create</a>
+
+{% endif %}
+
+
+{% endblock %}
+

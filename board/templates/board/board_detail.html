@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+{% block main_area %}
+
+<div class="card"> <!-- 카드형태로 나타내기 -->
+    <div class="card-body">
+    <h4 class="card-title">{{ board.title }}</h4> <!--카드에 타이틀 표시-->
+        <p class="float-right">{{ board.create_at }}</p> <!-- 카드에 만든 시간 작성 -->
+        {{ board.author }} <!-- 카드에 작성자 표시 -->
+        <hr>
+        {{ board.content | safe }} <!-- 카드에 콘텐츠 표시 -->
+    </div>
+</div>
+
+{% endblock %}
